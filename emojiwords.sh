@@ -9,7 +9,7 @@ object EmojiWords extends App {
 
   val word = args(0)
   val emoji = args(1)
-  val gap = ":blank:"
+  val gap = ":empty:"
   val emo = s":$emoji:"
 
   val letterMap: Map[Char, Vector[String]] = Map(
