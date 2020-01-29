@@ -1,23 +1,15 @@
-package main
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 
-import "fmt"
+object EmojiWords extends App {
 
-func main() {
+  val word = args(0)
+  val emoji = args(1)
+  val gap = ":empty:"
+  val emo = s":$emoji:"
 
-	word := args(0)
-	emoji := args(1)
-	gap := ":blank:"
-	emo := fmt.Sprintf(":%e:", emoji)
-	letterMap := make(map[string][5]string)
-
-	mapCreation()
-}
-
-func mapCreation() {
-	letterMap["a"] = [5]string{fmt.Sprintf"$gap$emo$emo$gap", s"$emo$gap$gap$emo", s"$emo$emo$emo$emo", s"$emo$gap$gap$emo", s"$emo$gap$gap$emo"}
-}
-
-    'a' -> Vector,
+  val letterMap: Map[Char, Vector[String]] = Map(
+    'a' -> Vector(s"$gap$emo$emo$gap", s"$emo$gap$gap$emo", s"$emo$emo$emo$emo", s"$emo$gap$gap$emo", s"$emo$gap$gap$emo"),
     'b' -> Vector(s"$emo$emo$emo$gap", s"$emo$gap$gap$emo", s"$emo$emo$emo$emo", s"$emo$gap$gap$emo", s"$emo$emo$emo$gap"),
     'c' -> Vector(s"$emo$emo$emo$emo", s"$emo$gap$gap$gap", s"$emo$gap$gap$gap", s"$emo$gap$gap$gap", s"$emo$emo$emo$emo"),
     'd' -> Vector(s"$emo$emo$emo$gap", s"$emo$gap$gap$emo", s"$emo$gap$gap$emo", s"$emo$gap$gap$emo", s"$emo$emo$emo$gap"),
@@ -45,3 +37,15 @@ func mapCreation() {
     'z' -> Vector(s"$emo$emo$emo$emo$emo", s"$gap$gap$gap$emo$gap", s"$gap$gap$emo$gap$gap", s"$gap$emo$gap$gap$gap", s"$emo$emo$emo$emo$emo"),
     ' ' -> Vector(gap, gap, gap, gap, gap)
   )
+
+  val result =
+    (0 to 4).map { i =>
+      word.map { letter =>
+        letterMap(letter)(i) + gap
+      }.mkString.dropRight(7) + "\n"
+    }.mkString.dropRight(1)
+
+  val clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+  val transferable = new StringSelection(result)
+  clipboard.setContents(transferable, null)
+}
